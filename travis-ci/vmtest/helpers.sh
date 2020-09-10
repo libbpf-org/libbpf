@@ -10,3 +10,5 @@ travis_fold() {
 	fi
 	echo
 }
+
+ARCH=$(uname -m)
