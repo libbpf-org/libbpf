@@ -46,6 +46,12 @@ jobs:
           env: KERNEL=LATEST
           script:  $CI_ROOT/vmtest/run_vmtest.sh || travis_terminate 1
 
+        - name: Kernel LATEST + selftests (s390x)
+          arch: s390x
+          language: bash
+          env: KERNEL=LATEST
+          script:  $CI_ROOT/vmtest/run_vmtest.sh || travis_terminate 1
+
         - name: Kernel 4.9.0 + selftests
           language: bash
           env: KERNEL=4.9.0
