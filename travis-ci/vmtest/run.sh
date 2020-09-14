@@ -205,7 +205,7 @@ matching_kernel_releases() {
 newest_rootfs_version() {
 	{
 	for file in "${!URLS[@]}"; do
-		if [[ $file =~ ^${PROJECT_NAME}-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
+		if [[ $file =~ ^${ARCH}/${PROJECT_NAME}-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
 			echo "${BASH_REMATCH[1]}"
 		fi
 	done
@@ -243,7 +243,7 @@ create_rootfs_img() {
 download_rootfs() {
 	local rootfsversion="$1"
 	local dir="$2"
-	download "${PROJECT_NAME}-vmtest-rootfs-$rootfsversion.tar.zst" |
+	download "${ARCH}/${PROJECT_NAME}-vmtest-rootfs-$rootfsversion.tar.zst" |
 		zstd -d | sudo tar -C "$dir" -x
 }
 
