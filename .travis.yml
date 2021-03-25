@@ -22,6 +22,9 @@ addons:
             - libcap-dev
             - libelf-dev
             - libdw-dev
+            - flex
+            - bison
+            - bc
 
 stages:
     # Run Coverity periodically instead of for each PR for following reasons:
