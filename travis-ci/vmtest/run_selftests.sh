@@ -1,8 +1,16 @@
 #!/bin/bash
 
-set -euo pipefail
+set -euxo pipefail
 
 source $(cd $(dirname $0) && pwd)/helpers.sh
+
+read_lists() {
+	(for path in "$@"; do
+		if [[ -s "$path" ]]; then
+			cat "$path"
+		fi;
+	done) | cut -d'#' -f1 | tr -s ' \t\n' ','
+}
 
 test_progs() {
 	if [[ "${KERNEL}" != '4.9.0' ]]; then
@@ -30,16 +38,11 @@ test_verifier() {
 
 travis_fold end vm_init
 
-configs_path='libbpf/travis-ci/vmtest/configs'
-blacklist_path="$configs_path/blacklist/BLACKLIST-${KERNEL}"
-if [[ -s "${blacklist_path}" ]]; then
-	BLACKLIST=$(cat "${blacklist_path}" | cut -d'#' -f1 | tr -s '[:space:]' ',')
-fi
-
-whitelist_path="$configs_path/whitelist/WHITELIST-${KERNEL}"
-if [[ -s "${whitelist_path}" ]]; then
-	WHITELIST=$(cat "${whitelist_path}" | cut -d'#' -f1 | tr -s '[:space:]' ',')
-fi
+configs_path=libbpf/travis-ci/vmtest/configs
+BLACKLIST=$(read_lists "$configs_path/BLACKLIST-${KERNEL}" \
+		       "$configs_path/BLACKLIST-${KERNEL}.${ARCH}")
+WHITELIST=$(read_lists "$configs_path/WHITELIST-${KERNEL}" \
+		       "$configs_path/WHITELIST-${KERNEL}.${ARCH}")
 
 cd libbpf/selftests/bpf
 
