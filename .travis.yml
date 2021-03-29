@@ -25,6 +25,8 @@ addons:
             - flex
             - bison
             - bc
+            - libguestfs-tools
+            - linux-image-generic
 
 stages:
     # Run Coverity periodically instead of for each PR for following reasons:
