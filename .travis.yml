@@ -22,6 +22,11 @@ addons:
             - libcap-dev
             - libelf-dev
             - libdw-dev
+            - flex
+            - bison
+            - bc
+            - libguestfs-tools
+            - linux-image-generic
 
 stages:
     # Run Coverity periodically instead of for each PR for following reasons:
@@ -37,6 +42,12 @@ jobs:
     include:
         - stage: Builds & Tests
           name: Kernel LATEST + selftests
+          language: bash
+          env: KERNEL=LATEST
+          script:  $CI_ROOT/vmtest/run_vmtest.sh || travis_terminate 1
+
+        - name: Kernel LATEST + selftests (s390x)
+          arch: s390x
           language: bash
           env: KERNEL=LATEST
           script:  $CI_ROOT/vmtest/run_vmtest.sh || travis_terminate 1
